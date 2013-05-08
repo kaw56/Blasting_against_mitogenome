@@ -1,5 +1,6 @@
 #!usr/bin/perl
 # ep_mito_blast.pl
+#version 1 for blasting against mitochondrial genome
 use warnings;
 use strict;
 

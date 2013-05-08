@@ -1,5 +1,6 @@
 #!usr/bin/perl
 # annotate_hits.pl
+# version 1.5 for blasting against mitochondrial genome
 use warnings;
 use strict;
 
