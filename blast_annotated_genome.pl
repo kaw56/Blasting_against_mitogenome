@@ -21,15 +21,13 @@ die 'usage: annotate_hits.pl <query> <query format> <database for comparison>'
 my $sequence_filename   = shift;
 my $format              = shift;
 my $database_filename   = shift;
-my $report_filename     = "$sequence_filename-RESULTS_summary.txt";
+my $report_filename     = $sequence_filename . "RESULTS_summary.txt";
 
-# check whether the file to search against exists in this directory...
 die "Check that the file to be searched against is in this directory\n" 
     unless (-e $database_filename);
 
 # open output for printing results...
-open (my $report, ">", $report_filename) 
-        or die "Can't open $report_filename for writing, $!";
+open (my $summary, ">", $report_filename) or die "Can't open $report_filename for writing, $!";
         
 # create seqIO object...
 my $seq_in  = Bio::SeqIO->new(
@@ -121,7 +119,7 @@ while (my $seq = $seq_in->next_seq() ) {
                 $alnIO->write_aln($information_for{'alignment'});
                 
                 # print to summary file
-                print $report "$information_for{'query_name'} $information_for{'hit_name'} $information_for{'evalue'}"
+                print $summary "$information_for{'query_name'} $information_for{'hit_name'} $information_for{'evalue'}"
                 
             }
         }    
