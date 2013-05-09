@@ -8,7 +8,7 @@ use strict;
 use Bio::SearchIO;
 use Bio::SeqIO;
 use Bio::Tools::Run::StandAloneBlastPlus;
-use Bio::AlignIO;
+
 
 ##########
 # set up #
@@ -110,21 +110,22 @@ while (my $seq = $seq_in->next_seq() ) {
                 $information_for{'alignment'}       = $hsp->get_aln;
                 $information_for{'start'}           = $hsp->start('hit');
                 $information_for{'end'}             = $hsp->end('hit');
+                $information_for{'query_string'}    = $hsp->query_string;
+                $information_for{'hit_string'}      = $hsp->hit_string;
+                $information_for{'homology_string'} = $hsp->homology_string;
                 
                 # print to the individual report
                 $information_for_ref = \%information_for;
                 print_hsp($ind_report_out, $information_for_ref);
                 
-                my $alnIO = Bio::AlignIO->new(-format =>"msf", -fh => $ind_report_out,);
-                $alnIO->write_aln($information_for{'alignment'});
-                
+                              
                 # print to summary file
-                print $summary "$information_for{'query_name'} $information_for{'hit_name'} $information_for{'evalue'}"
+                print $summary "$information_for{'query_name'} $information_for{'hit_name'} $information_for{'evalue'}\n"
                 
             }
         }    
         
-        close($ind_report_out);  
+          
         
         # also write to a summary report that has name of query, name of hit
         # and expect value
@@ -209,6 +210,11 @@ HSP
     Fraction identical:     $info_ref->{'frac_identical'}
     Start:                  $info_ref->{'start'}
     End                     $info_ref->{'end'}
+    
+Query:  $info_ref->{query_string}
+        $info_ref->{homology_string}
+Sbjct:  $info_ref->{hit_string}
+
 
 EOF
 
