@@ -99,6 +99,10 @@ while (my $seq = $seq_in->next_seq() ) {
             $information_for{'hit_sig'}     = $blast_hit->significance;
             $information_for{'num_hsp'}     = $blast_hit->num_hsps;
             
+            # adjust the hit name
+            $information_for{'hit_name'} =~ s/lcl\|(\w{4})/$1/;
+            
+            
             # print hit related information
             $information_for_ref = \%information_for;
             print_hit($ind_report_out, $information_for_ref);
