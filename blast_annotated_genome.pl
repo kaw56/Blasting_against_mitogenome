@@ -75,22 +75,13 @@ while (my $seq = $seq_in->next_seq() ) {
     if ($number_of_hits == 0) {
         # if not a hit move onto next query sequence...
         next;         
-    } 
-    else {
+    } else {
         # get all the things to go into both reports in a hash...
         $information_for{'query_name'}       = $blast_result->query_name;
         $information_for{'algorithm'}        = $blast_result->algorithm; 
         $information_for{'database_entries'} = $blast_result->database_entries;
         $information_for{'hit_num'}          = $blast_result->num_hits();
         
-        # open an individual report file for output
-        my $query_id = $information_for{'query_name'} . "_REPORT.txt";
-        open(my $ind_report_out, '>', $query_id) 
-                or die "can't open $query_id for writing, $!"; 
-        
-        # print the file header... 
-        my $information_for_ref = \%information_for; # passing the hash by ref
-        print_header($ind_report_out, $information_for_ref); 
         
         while (my $blast_hit = $blast_result->next_hit() ) {
             # add hit specific things to hash
@@ -118,21 +109,34 @@ while (my $seq = $seq_in->next_seq() ) {
                 $information_for{'hit_string'}      = $hsp->hit_string;
                 $information_for{'homology_string'} = $hsp->homology_string;
                 
-                # print to the individual report
-                $information_for_ref = \%information_for;
-                print_hsp($ind_report_out, $information_for_ref);
-                
-                              
                 # print to summary file
-                print $summary "$information_for{'query_name'} $information_for{'hit_name'} $information_for{'evalue'}\n"
+                print $summary "$information_for{'query_name'} $information_for{'hit_name'} $information_for{'evalue'}\n";
+                
+                if ($information_for{'evalue'} != 0) {
+                    next;
+                } else {
+                
+                    # Write an individual detailed hit summary
+                    my $query_id = $information_for{'query_name'} . "_REPORT.txt";
+                    open(my $ind_report_out, '>', $query_id) 
+                            or die "can't open $query_id for writing, $!"; 
+                    
+                    my $information_for_ref = \%information_for; # passing the hash by ref
+                    print_header($ind_report_out, $information_for_ref); 
+                    print_hit($ind_report_out, $information_for_ref);
+                    print_hsp($ind_report_out, $information_for_ref);   
+                    
+                    close($ind_report_out) or die "couldn't close $query_id, $!";                
+                   
+                }
+                              
                 
             }
         }    
         
           
         
-        # also write to a summary report that has name of query, name of hit
-        # and expect value
+      
     
     
     
