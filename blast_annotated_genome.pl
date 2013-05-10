@@ -94,10 +94,6 @@ while (my $seq = $seq_in->next_seq() ) {
             $information_for{'hit_name'} =~ s/lcl\|(\w{4})/$1/;
             
             
-            # print hit related information
-            $information_for_ref = \%information_for;
-            print_hit($ind_report_out, $information_for_ref);
-            
             while(my $hsp = $blast_hit->next_hsp() ) {
                 # add hsp stuff to the hash
                 $information_for{'evalue'}          = $hsp->evalue;
