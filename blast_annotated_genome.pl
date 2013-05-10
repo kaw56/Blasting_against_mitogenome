@@ -114,10 +114,13 @@ while (my $seq = $seq_in->next_seq() ) {
                 $information_for{'hit_string'}      = $hsp->hit_string;
                 $information_for{'homology_string'} = $hsp->homology_string;
                 
-                # print to the individual report
-                $information_for_ref = \%information_for;
-                print_hsp($ind_report_out, $information_for_ref);
-                
+                if ($information_for{'evalue'} != 0) {
+                    next;
+                } else {
+                    # print to the individual report
+                    $information_for_ref = \%information_for;
+                    print_hsp($ind_report_out, $information_for_ref);
+                }
                               
                 # print to summary file
                 print $summary "$information_for{'query_name'} $information_for{'hit_name'} $information_for{'evalue'}\n"
@@ -127,8 +130,7 @@ while (my $seq = $seq_in->next_seq() ) {
         
           
         
-        # also write to a summary report that has name of query, name of hit
-        # and expect value
+      
     
     
     
