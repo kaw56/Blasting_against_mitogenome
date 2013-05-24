@@ -89,7 +89,6 @@ while (my $seq = $seq_in->next_seq() ) {
             while (my $blast_hit = $blast_result->next_hit() ) {
                 # add hit specific things to hash
                 $information_for{'hit_name'}    = $blast_hit->name;
-                $information_for{'hit_length'}  = $blast_hit->length;
                 $information_for{'hit_sig'}     = $blast_hit->significance;
                 $information_for{'num_hsp'}     = $blast_hit->num_hsps;
                 
@@ -107,9 +106,11 @@ while (my $seq = $seq_in->next_seq() ) {
                     $information_for{'query_string'}    = $hsp->query_string;
                     $information_for{'hit_string'}      = $hsp->hit_string;
                     $information_for{'homology_string'} = $hsp->homology_string;
+                    $information_for{'score'}           = $hsp->score;
+                    $information_for{'length'}          = $hsp->length('total');
                     
                     # print to summary file
-                    print $summary "$information_for{'query_name'} $information_for{'hit_name'} $information_for{'evalue'}\n";
+                    print $summary "$information_for{'query_name'} $information_for{'hit_name'} $information_for{'evalue'} $information_for{'length'}\n";
                     
                     if ($information_for{'evalue'} != 0) {
                         next;
@@ -133,6 +134,9 @@ while (my $seq = $seq_in->next_seq() ) {
         }  
     }
 }
+
+
+$factory->cleanup;
 
 # remove temporary blast report
 unlink "_blast_report";
