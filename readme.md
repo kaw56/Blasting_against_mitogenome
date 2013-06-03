@@ -17,7 +17,7 @@ File list
 
 Requirements
 ------------
-+Perl
-+bioperl
-+bioperl-run
++ Perl
++ bioperl
++ bioperl-run
 
